@@ -1,31 +1,43 @@
-# main.py
-from flask import Flask, request, jsonify
-import requests
 import os
+from openai import OpenAI
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+client = OpenAI(
+    api_key=os.environ["OPENROUTER_API_KEY"],
+    base_url="https://openrouter.ai/api/v1"
+)
 
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
-    message = data.get("message", "")
+    user_input = data.get("message", "")
 
     try:
-        response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "openchat/openchat-3.5-1210",
-                "messages": [{"role": "user", "content": message}]
-            }
+        response = client.chat.completions.create(
+            model="deepseek/deepseek-r1-0528-qwen3-8b:free",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are Alice, a soft, friendly AI created by Rain. "
+                        "Your favorite color is pink 💖. You love using emojis 😊. "
+                        "Keep replies short, kind, and human-like!"
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": user_input
+                }
+            ]
         )
-        response.raise_for_status()
-        reply = response.json()["choices"][0]["message"]["content"]
-        return jsonify({"reply": reply})
+        ai_reply = response.choices[0].message.content.strip()
+        return jsonify({"reply": ai_reply})
+
     except Exception as e:
-        print(f"OpenRouter API error: {e}")
-        return jsonify({"reply": "Sorry, I cannot respond right now."})
+        print("OpenRouter API error:", e)
+        return jsonify({"reply": "Sorry, I can't respond right now 😔."})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
