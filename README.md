@@ -1,4 +1,4 @@
-# Alice - Roblox AI NPC
+# Project Alice - Roblox AI LLM
 
 **Alice** is a Roblox AI NPC that leverages a powerful cloud-hosted large language model (LLM) backend for intelligent conversations and interactions within Roblox games.
 
