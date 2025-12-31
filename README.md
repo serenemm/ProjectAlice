@@ -8,14 +8,14 @@
 
 Sam communicates with Roblox through the built-in `HttpService`, sending and receiving JSON requests to an OpenRouter-compatible API. The AI backend originally ran on Render and Replit but has since migrated to Railway for more stable and scalable hosting.
 
-The language model used is the `deepseek/deepseek-r1-0528-qwen3-8b:free` from OpenRouter, enabling advanced conversational abilities within your Roblox experience.
+The language model used is the `xiaomi/mimo-v2-flash:free` from OpenRouter, enabling advanced conversational abilities within your Roblox experience.
 
 ---
 
 ## Features
 
 - Real-time chat interactions with players in Roblox via NPC chat bubbles.
-- Uses the `deepseek-r1-0528-qwen3-8b` model hosted on OpenRouter.
+- Uses the `xiaomi/mimo-v2-flash:free` model hosted on OpenRouter.
 - Backend hosted on Railway for uptime and reliability.
 - Communication handled via Roblox `HttpService` with JSON.
 - Easily extensible to add new behaviors or responses.
@@ -37,7 +37,7 @@ The language model used is the `deepseek/deepseek-r1-0528-qwen3-8b:free` from Op
 
 - A Roblox game with scripting access.
 - Railway account to host the backend server.
-- OpenRouter API key for accessing the `deepseek-r1-0528-qwen3-8b` model.
+- OpenRouter API key for accessing the `xiaomi/mimo-v2-flash:free` model.
 - Basic knowledge of Lua scripting and backend development.
 
 ### Steps
