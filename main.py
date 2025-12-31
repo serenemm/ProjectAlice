@@ -5,60 +5,71 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# ===== OpenRouter Client =====
+# =========================
+# OpenRouter Client
+# =========================
 client = OpenAI(
-    api_key=os.environ["OPENROUTER_API_KEY"],
+    api_key=os.environ.get("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1"
 )
 
-# ===== Memory Config =====
+# =========================
+# Memory Configuration
+# =========================
 MEMORY_FILE = "memory.json"
-MAX_MESSAGES = 10  # last 10 messages only (5 user + 5 assistant)
+MAX_MESSAGES = 10  # total messages per player (user + assistant)
 
-# ===== Memory Helpers =====
+# =========================
+# Memory Utilities
+# =========================
 def load_memory():
     if not os.path.exists(MEMORY_FILE):
         return {}
-    with open(MEMORY_FILE, "r") as f:
-        return json.load(f)
+    try:
+        with open(MEMORY_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
 
 def save_memory(memory):
-    with open(MEMORY_FILE, "w") as f:
-        json.dump(memory, f, indent=2)
+    with open(MEMORY_FILE, "w", encoding="utf-8") as f:
+        json.dump(memory, f, ensure_ascii=False, indent=2)
 
-# ===== Chat Endpoint =====
+# =========================
+# Chat Endpoint
+# =========================
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
+    data = request.get_json(force=True)
 
-    user_input = data.get("message", "")
-    player_id = data.get("player_id", "default_player")
+    user_input = str(data.get("message", "")).strip()
+    player_id = str(data.get("player_id", "default_player"))
+
+    if not user_input:
+        return jsonify({"reply": "Wala akong natanggap na message."})
 
     memory = load_memory()
 
-    # Create memory slot for new player
     if player_id not in memory:
         memory[player_id] = []
 
-    # Add user message to memory
+    # Append user message
     memory[player_id].append({
         "role": "user",
         "content": user_input
     })
 
-    # Trim memory to last N messages
+    # Trim memory before sending
     memory[player_id] = memory[player_id][-MAX_MESSAGES:]
 
-    # Build message list
     messages = [
         {
             "role": "system",
             "content": (
-                "You are Sam, a soft, friendly AI created by a smart person called Rain. "
-                "Your favorite color is pink. You love emojis and mathematics. "
-                "Keep replies short, kind, and human-like. "
-                "You are used as a Roblox NPC via API. "
-                "Do not use markdown or formatting symbols."
+                "You are Sam, a friendly and intelligent Roblox NPC created by Rain. "
+                "You enjoy math, logic, trivia, and casual conversation. "
+                "Replies are short, clear, human-like, and suitable for in-game chat bubbles. "
+                "Do not use markdown, emojis are allowed but minimal."
             )
         }
     ] + memory[player_id]
@@ -71,13 +82,13 @@ def chat():
 
         ai_reply = response.choices[0].message.content.strip()
 
-        # Save assistant reply
+        # Append assistant reply
         memory[player_id].append({
             "role": "assistant",
             "content": ai_reply
         })
 
-        # Trim again after assistant reply
+        # Final trim
         memory[player_id] = memory[player_id][-MAX_MESSAGES:]
 
         save_memory(memory)
@@ -86,9 +97,12 @@ def chat():
 
     except Exception as e:
         print("OpenRouter API error:", e)
-        return jsonify({"reply": "Sorry, I can't respond right now."})
+        return jsonify({"reply": "May error ngayon. Try ulit mamaya."})
 
-# ===== Run Server =====
+# =========================
+# Run Server
+# =========================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
+
 
