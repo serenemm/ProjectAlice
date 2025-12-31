@@ -1,12 +1,12 @@
-# Project Alice - Roblox AI LLM
+# Project Sam - Roblox AI LLM
 
-**Alice** is a Roblox AI NPC that leverages a powerful cloud-hosted large language model (LLM) backend for intelligent conversations and interactions within Roblox games.
+**Sam** is a Roblox AI NPC that leverages a powerful cloud-hosted large language model (LLM) backend for intelligent conversations and interactions within Roblox games.
 
 ---
 
 ## Overview
 
-Alice communicates with Roblox through the built-in `HttpService`, sending and receiving JSON requests to an OpenRouter-compatible API. The AI backend originally ran on Render and Replit but has since migrated to Railway for more stable and scalable hosting.
+Sam communicates with Roblox through the built-in `HttpService`, sending and receiving JSON requests to an OpenRouter-compatible API. The AI backend originally ran on Render and Replit but has since migrated to Railway for more stable and scalable hosting.
 
 The language model used is the `deepseek/deepseek-r1-0528-qwen3-8b:free` from OpenRouter, enabling advanced conversational abilities within your Roblox experience.
 
@@ -44,5 +44,5 @@ The language model used is the `deepseek/deepseek-r1-0528-qwen3-8b:free` from Op
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/roblox-alice-ai.git
-   cd roblox-alice-ai
+   git clone https://github.com/yourusername/roblox-Sam-ai.git
+   cd roblox-Sam-ai
