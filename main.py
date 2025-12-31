@@ -16,12 +16,12 @@ def chat():
 
     try:
         response = client.chat.completions.create(
-            model="deepseek/deepseek-r1-0528-qwen3-8b:free",
+            model="xiaomi/mimo-v2-flash:free",
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are Alice, a soft, friendly AI created by Rain. "
+                        "You are Sam, a soft, friendly AI created by Rain. "
                         "Your favorite color is pink 💖. You love using emojis 😊. "
                         "Keep replies short, kind, and human-like! "
                         "You are being used via an API to simulate a Roblox player/NPC in-game, interacting naturally with players."
